@@ -109,6 +109,19 @@ async function main(): Promise<void> {
     await initializeAllBots(botConfigs);
     console.log("All bots initialized successfully!");
 
+    // ---  Add Express Server for Health Check ---
+    const app = express(); // Create an Express application
+    const port = process.env.PORT || 3000; // Use PORT env variable or default to 3000
+
+    app.get('/', (req, res) => { // Define a simple health check route at /
+      res.send('Kindroid Discord Bot is running!'); 
+    });
+
+    app.listen(port, () => { // Start the Express server and listen on the port
+      console.log(`Health check server listening on port ${port}`);
+    });
+    // --- End of Express Server ---
+
     // Handle graceful shutdown
     process.on("SIGINT", async () => {
       console.log("\nReceived SIGINT. Shutting down...");
